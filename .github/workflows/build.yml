@@ -32,10 +32,21 @@ jobs:
           <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>*{margin:0;padding:0} body{background:#000}</style>
+          <style>
+            *{margin:0;padding:0}
+            body{background:#000}
+            iframe{
+              position:fixed;
+              top:0;left:0;
+              width:100%;height:100%;
+              border:none;
+            }
+          </style>
           </head>
           <body>
-          <script>window.location.replace("https://iraqibh00-lgtm.github.io/falcons-iraq/");</script>
+          <iframe src="https://iraqibh00-lgtm.github.io/falcons-iraq/" 
+                  allow="geolocation; notifications; camera; microphone">
+          </iframe>
           </body>
           </html>
           EOF
