@@ -31,6 +31,20 @@ jobs:
           npx cap add android
           npx cap sync android
 
+      - name: Add Icon
+        run: |
+          Icon=$(ls *.png | head -1)
+          mkdir -p android/app/src/main/res/mipmap-xxxhdpi
+          mkdir -p android/app/src/main/res/mipmap-xxhdpi
+          mkdir -p android/app/src/main/res/mipmap-xhdpi
+          mkdir -p android/app/src/main/res/mipmap-hdpi
+          mkdir -p android/app/src/main/res/mipmap-mdpi
+          cp $Icon android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          cp $Icon android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp $Icon android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp $Icon android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp $Icon android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+
       - name: Build APK
         run: |
           cd android
