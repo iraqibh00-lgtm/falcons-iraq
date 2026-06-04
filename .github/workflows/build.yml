@@ -81,7 +81,7 @@ jobs:
               }
 
               @Override
-              protected void onStop() {
+              public void onStop() {
                   super.onStop();
                   if (Settings.canDrawOverlays(this)) {
                       startService(new Intent(this, FloatingWidgetService.class));
