@@ -27,6 +27,7 @@ jobs:
         run: |
           mkdir -p www
           cp index.html www/
+          cp sw.js www/
           npx cap init "FalconsIraq" "com.iraqibh.falcons" --web-dir www
           npx cap add android
           npx cap sync android
