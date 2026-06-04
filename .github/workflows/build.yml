@@ -31,14 +31,26 @@ jobs:
           npx cap add android
           npx cap sync android
 
+      - name: Install ImageMagick
+        run: sudo apt-get install -y imagemagick
+
       - name: Add Icon
         run: |
-          Icon=$(ls *.png | head -1)
-          for size in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            mkdir -p android/app/src/main/res/mipmap-$size
-            cp $Icon android/app/src/main/res/mipmap-$size/ic_launcher.png
-            cp $Icon android/app/src/main/res/mipmap-$size/ic_launcher_round.png
-            cp $Icon android/app/src/main/res/mipmap-$size/ic_launcher_foreground.png
+          ICON=$(ls *.png | head -1)
+          declare -A SIZES=(
+            [mdpi]=48
+            [hdpi]=72
+            [xhdpi]=96
+            [xxhdpi]=144
+            [xxxhdpi]=192
+          )
+          for density in "${!SIZES[@]}"; do
+            size=${SIZES[$density]}
+            DIR="android/app/src/main/res/mipmap-$density"
+            mkdir -p $DIR
+            convert $ICON -resize ${size}x${size} $DIR/ic_launcher.png
+            convert $ICON -resize ${size}x${size} $DIR/ic_launcher_round.png
+            convert $ICON -resize ${size}x${size} $DIR/ic_launcher_foreground.png
           done
 
       - name: Build APK
