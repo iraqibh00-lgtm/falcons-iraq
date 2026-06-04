@@ -17,7 +17,9 @@ jobs:
           npm install @capacitor/core @capacitor/android
       - name: Setup Capacitor
         run: |
-          npx cap init "FalconsIraq" "com.iraqibh.falcons" --web-dir .
+          mkdir -p www
+          cp index.html www/
+          npx cap init "FalconsIraq" "com.iraqibh.falcons" --web-dir www
       - name: Add Android
         run: npx cap add android
       - name: Copy files
