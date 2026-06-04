@@ -26,8 +26,19 @@ jobs:
       - name: Init and build
         run: |
           mkdir -p www
-          cp index.html www/
-          cp sw.js www/
+          cat > www/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>*{margin:0;padding:0} body{background:#000}</style>
+          </head>
+          <body>
+          <script>window.location.replace("https://iraqibh00.github.io/falcons-iraq/");</script>
+          </body>
+          </html>
+          EOF
           npx cap init "FalconsIraq" "com.iraqibh.falcons" --web-dir www
           npx cap add android
           npx cap sync android
@@ -37,19 +48,11 @@ jobs:
 
       - name: Add Icon
         run: |
-          echo "=== الملفات الموجودة ==="
-          ls -la
-          echo "=== ملفات PNG ==="
-          find . -name "*.png" 2>/dev/null
-          
           ICON=$(find . -maxdepth 1 -name "*.png" | head -1)
-          echo "الأيقونة المختارة: $ICON"
-          
           if [ -z "$ICON" ]; then
             echo "خطأ: لم يتم العثور على ملف PNG!"
             exit 1
           fi
-          
           declare -A SIZES=(
             [mdpi]=48
             [hdpi]=72
@@ -65,11 +68,8 @@ jobs:
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher_round.png
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher_foreground.png
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher_background.png
-            echo "✅ تم: $density ($size x $size)"
           done
-          
           rm -rf android/app/src/main/res/mipmap-anydpi-v26
-          echo "✅ تم حذف mipmap-anydpi-v26"
 
       - name: Build APK
         run: |
