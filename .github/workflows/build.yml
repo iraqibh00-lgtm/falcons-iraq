@@ -35,7 +35,7 @@ jobs:
           <style>*{margin:0;padding:0} body{background:#000}</style>
           </head>
           <body>
-          <script>window.location.replace("https://iraqibh00.github.io/falcons-iraq/");</script>
+          <script>window.location.replace("https://iraqibh00-lgtm.github.io/falcons-iraq/");</script>
           </body>
           </html>
           EOF
