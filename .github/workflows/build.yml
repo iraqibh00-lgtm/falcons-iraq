@@ -36,7 +36,19 @@ jobs:
 
       - name: Add Icon
         run: |
-          ICON=$(ls *.png | head -1)
+          echo "=== الملفات الموجودة ==="
+          ls -la
+          echo "=== ملفات PNG ==="
+          find . -name "*.png" 2>/dev/null
+          
+          ICON=$(find . -maxdepth 1 -name "*.png" | head -1)
+          echo "الأيقونة المختارة: $ICON"
+          
+          if [ -z "$ICON" ]; then
+            echo "خطأ: لم يتم العثور على ملف PNG!"
+            exit 1
+          fi
+          
           declare -A SIZES=(
             [mdpi]=48
             [hdpi]=72
@@ -51,7 +63,12 @@ jobs:
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher.png
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher_round.png
             convert $ICON -resize ${size}x${size} $DIR/ic_launcher_foreground.png
+            convert $ICON -resize ${size}x${size} $DIR/ic_launcher_background.png
+            echo "✅ تم: $density ($size x $size)"
           done
+          
+          rm -rf android/app/src/main/res/mipmap-anydpi-v26
+          echo "✅ تم حذف mipmap-anydpi-v26"
 
       - name: Build APK
         run: |
