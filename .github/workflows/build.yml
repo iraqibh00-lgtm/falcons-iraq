@@ -61,6 +61,35 @@ jobs:
 
       - name: Add Floating Widget
         run: |
+          cat > android/app/src/main/java/com/iraqibh/falcons/MainActivity.java << 'EOF'
+          package com.iraqibh.falcons;
+          import android.content.Intent;
+          import android.os.Bundle;
+          import android.provider.Settings;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  if (Settings.canDrawOverlays(this)) {
+                      startService(new Intent(this, FloatingWidgetService.class));
+                  } else {
+                      Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                      startActivity(intent);
+                  }
+              }
+
+              @Override
+              protected void onStop() {
+                  super.onStop();
+                  if (Settings.canDrawOverlays(this)) {
+                      startService(new Intent(this, FloatingWidgetService.class));
+                  }
+              }
+          }
+          EOF
+
           cat > android/app/src/main/java/com/iraqibh/falcons/FloatingWidgetService.java << 'EOF'
           package com.iraqibh.falcons;
           import android.app.Service;
@@ -135,8 +164,6 @@ jobs:
               }
           }
           EOF
-
-          sed -i 's/super.onCreate(savedInstanceState);/super.onCreate(savedInstanceState);\n        if (android.provider.Settings.canDrawOverlays(this)) {\n            startService(new Intent(this, FloatingWidgetService.class));\n        } else {\n            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION);\n            startActivity(intent);\n        }/' android/app/src/main/java/com/iraqibh/falcons/MainActivity.java
 
       - name: Install ImageMagick
         run: sudo apt-get install -y imagemagick
