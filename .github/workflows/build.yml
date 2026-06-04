@@ -72,12 +72,11 @@ jobs:
               @Override
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
-                  if (Settings.canDrawOverlays(this)) {
-                      startService(new Intent(this, FloatingWidgetService.class));
-                  } else {
+                  if (!Settings.canDrawOverlays(this)) {
                       Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                       startActivity(intent);
                   }
+                  stopService(new Intent(this, FloatingWidgetService.class));
               }
 
               @Override
@@ -86,6 +85,12 @@ jobs:
                   if (Settings.canDrawOverlays(this)) {
                       startService(new Intent(this, FloatingWidgetService.class));
                   }
+              }
+
+              @Override
+              protected void onResume() {
+                  super.onResume();
+                  stopService(new Intent(this, FloatingWidgetService.class));
               }
           }
           EOF
